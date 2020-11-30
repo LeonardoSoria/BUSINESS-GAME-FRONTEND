@@ -2,12 +2,17 @@
   "name": "business-game-frontend",
   "version": "0.0.0",
   "scripts": {
+    "heroku-postbuild": "ng build --prod",
     "ng": "ng",
     "start": "node server.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
+  },
+  "engines": {
+    "node": "12.1.0",
+    "npm": "6.9.0"
   },
   "private": true,
   "dependencies": {
