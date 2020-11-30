@@ -7,7 +7,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'dist/sig-scvs')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/dist/sig-scvs/index.html'));
+  res.sendFile(path.join(__dirname + '/dist/business-game-frontend/index.html'));
 });
 
 const port = process.env.PORT || 4200;
