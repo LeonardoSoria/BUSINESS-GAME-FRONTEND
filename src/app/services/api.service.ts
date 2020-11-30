@@ -9,7 +9,7 @@ import { LogService } from './log.service';
 })
 export class ApiService {
 
-  baseUrl = 'http://localhost:5000/';
+  baseUrl = 'https://business-game-backend.herokuapp.com/';
 
   /*  Inside the parameters we declare the httpClient wich is the one that is going to do the connection to the API
       and the logger is the service that is going to do the Log service*/
