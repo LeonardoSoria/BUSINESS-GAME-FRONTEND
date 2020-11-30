@@ -1,0 +1,46 @@
+<div class="wrapper d-flex align-items-stretch">
+  <!-- Side Bar  -->
+  <nav
+    id="sidebar"
+    class="order-last"
+    class="img"
+  >
+    <div class="custom-menu">
+      <button
+        type="button"
+        id="sidebarCollapse"
+        class="btn btn-primary"
+      ></button>
+    </div>
+    <div class="">
+      <h1>
+        <a href="index.html" class="logo"
+          >Business Game<span>A game about real life</span></a
+        >
+      </h1>
+      <ul class="list-unstyled components mb-5">
+        <li class="active">
+          <a href="#"><span class="fa fa-user mr-3"></span> Profile</a>
+        </li>
+        <li>
+          <a (click)="logout()"><span class="fa fa-sign-out mr-3"></span> Sign out</a>
+        </li>
+      </ul>
+
+      <div style="margin-top: 20vh; cursor: pointer;" (click)="showQuestion()">
+        <img style="height: 30vh; width: 100%;" src="../../../assets/img/casa.gif" alt="">
+        <p style="font-size: 4vh; padding: 1vh; text-align: center;">Click on the house to answer some questions!</p>
+      </div>
+    </div>
+  </nav>
+  <!-- Side Bar  -->
+
+  <!-- Page Content  -->
+  <div id="content" class="p-4 p-md-5 pt-5">
+    <div style="margin-top: 10%; margin-left: 50%; height: 20%;">
+      <h3>Building Level {{progress.building}}</h3>
+      <img style="height: 80%;" src="../../../assets/img/fase-1.gif" alt="">  
+    </div>
+  </div>
+  <!-- Page Content  -->
+</div>

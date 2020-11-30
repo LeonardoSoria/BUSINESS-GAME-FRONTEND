@@ -1,0 +1,51 @@
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <div class="login100-pic js-tilt" data-tilt>
+                <h2>Business Game</h2>
+                <img src="../../../assets/img/fase-6.gif" alt="IMG">
+            </div>
+
+            <form class="login100-form validate-form">
+                <span class="login100-form-title">
+                    User Login
+                </span>
+
+                <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+                    <input class="input100" [(ngModel)]="userLogin" (keydown.enter)="login()" type="text" name="email" placeholder="Email or Username">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </span>
+                </div>
+
+                <div class="wrap-input100 validate-input" data-validate = "Password is required">
+                    <input class="input100" [(ngModel)]="password" (keydown.enter)="login()" type="password" name="pass" placeholder="Password">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                    </span>
+                </div>
+                
+                <div class="container-login100-form-btn">
+                    <button class="login100-form-btn" (click)="login()">
+                        Login
+                    </button>
+                </div>
+                <div>
+                    <span style="color: red;" *ngIf="mensaje">Debe llenar todos los campos, y la contraseña debe contar por lo
+                    menos con una letra minúscula, una letra mayúscula, un número, un signo y debe de tener 8 o más
+                    caractéres.</span>
+                    <span style="color: red;" *ngIf="mensaje2">User or password incorrect.</span>
+                </div>
+
+                <div class="text-center p-t-136">
+                    <a class="txt2" routerLink="/register">
+                        Create your Account
+                        <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
