@@ -4,7 +4,7 @@ const path = require('path');
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'dist/sig-scvs')));
+app.use(express.static(path.join(__dirname, 'dist/business-game-frontend')));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/dist/business-game-frontend/index.html'));
