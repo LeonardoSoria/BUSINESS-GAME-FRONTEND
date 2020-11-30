@@ -54,8 +54,12 @@ export class InGameComponent implements OnInit {
     // this.question = this.questions[Math.floor(Math.random() * this.questions.length)];
   }
 
-  answerQuestion() {
-
+  /**
+   * 
+   * @param args 
+   */
+  answerQuestion(args) {
+    return 'hola';
   }
 
   getQuestions() {
