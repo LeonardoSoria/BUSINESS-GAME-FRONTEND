@@ -1,10 +1,6 @@
 <div class="wrapper d-flex align-items-stretch">
   <!-- Side Bar  -->
-  <nav
-    id="sidebar"
-    class="order-last"
-    class="img"
-  >
+  <nav id="sidebar" class="order-last" class="img">
     <div class="custom-menu">
       <button
         type="button"
@@ -20,16 +16,25 @@
       </h1>
       <ul class="list-unstyled components mb-5">
         <li class="active">
-          <a href="#"><span class="fa fa-user mr-3"></span> Profile</a>
+          <a style="cursor: pointer;" href="#openProfile" data-toggle="modal">
+            <span class="fa fa-user mr-3"></span> Profile</a>
         </li>
         <li>
-          <a (click)="logout()"><span class="fa fa-sign-out mr-3"></span> Sign out</a>
+          <a (click)="logout()" style="cursor: pointer;"
+            ><span class="fa fa-sign-out mr-3"></span> Sign out</a
+          >
         </li>
       </ul>
 
-      <div style="margin-top: 20vh; cursor: pointer;" (click)="showQuestion()">
-        <img style="height: 30vh; width: 100%;" src="../../../assets/img/casa.gif" alt="">
-        <p style="font-size: 4vh; padding: 1vh; text-align: center;">Click on the house to answer some questions!</p>
+      <div style="margin-top: 20vh; cursor: pointer" (click)="showQuestion()">
+        <a href="#openQuestion" data-toggle="modal"><img
+          style="height: 30vh; width: 100%"
+          src="../../../assets/img/casa.gif"
+          alt=""
+        /> </a>
+        <p style="font-size: 4vh; padding: 1vh; text-align: center">
+          Click on the house to answer some questions!
+        </p>
       </div>
     </div>
   </nav>
@@ -37,10 +42,138 @@
 
   <!-- Page Content  -->
   <div id="content" class="p-4 p-md-5 pt-5">
-    <div style="margin-top: 10%; margin-left: 50%; height: 20%;">
-      <h3>Building Level {{progress.building}}</h3>
-      <img style="height: 80%;" src="../../../assets/img/fase-1.gif" alt="">  
+    <!-- Bar Level  -->
+    <div style="margin-left: 80vh;">
+      <div
+        class="coc-orange-knop"
+        id="level"
+        style="
+          background: rgba(39, 133, 145, 1);
+          box-shadow: none;
+          height: 32px;
+          width: 210px;">
+        <div class="coc-maximum" id="">
+          <div
+            id="witteschijn"
+            style="
+              background: rgba(255, 255, 255, 0.5);
+              width: 240px;
+              height: 44%;"></div>
+        </div>
+        <span id="xptekst"> 1 168 </span>
+      </div>
+      <span id="leveltekst"> {{level}} </span>
+      <div id="levelster">
+        <div id="up-triangle"></div>
+        <div id="down-triangle"></div>
+        <div id="right-triangle"></div>
+        <div id="left-triangle"></div>
+      </div>
+      <div id="levelster-licht">
+        <div id="up-triangle" style="border-bottom: 40px solid #96dcd4"></div>
+        <div id="down-triangle" style="border-top: 40px solid #96dcd4"></div>
+        <div id="right-triangle" style="border-left: 36px solid #96dcd4"></div>
+        <div id="left-triangle" style="border-right: 36px solid #96dcd4"></div>
+      </div>
+      <div id="levelster-donker">
+        <div id="up-triangle" style="border-bottom: 40px solid #1f9abb"></div>
+        <div id="down-triangle" style="border-top: 40px solid #1f9abb"></div>
+        <div id="right-triangle" style="border-left: 36px solid #1f9abb"></div>
+        <div id="left-triangle" style="border-right: 36px solid #1f9abb"></div>
+      </div>
     </div>
+    <!-- Bar Level  -->
+
+    <!-- Building  -->
+    <div style="margin-top: 10%; margin-left: 50%; height: 20%">
+      <h3>Building Level {{building}}</h3>
+      <img *ngIf="building === 1" style="height: 80%" src="../../../assets/img/fase-1.gif" alt="" />
+      <img *ngIf="building === 2" style="height: 80%" src="../../../assets/img/fase-2.gif" alt="" />
+      <img *ngIf="building === 3" style="height: 80%" src="../../../assets/img/fase-3.gif" alt="" />
+      <img *ngIf="building === 4" style="height: 80%" src="../../../assets/img/fase-4.gif" alt="" />
+      <img *ngIf="building === 5" style="height: 80%" src="../../../assets/img/fase-5.gif" alt="" />
+      <img *ngIf="building === 6" style="height: 80%" src="../../../assets/img/fase-6.gif" alt="" />
+      <img *ngIf="building === 7" style="height: 80%" src="../../../assets/img/fase-7.gif" alt="" />
+      <img *ngIf="building === 8" style="height: 80%" src="../../../assets/img/fase-8.gif" alt="" />
+      <img *ngIf="building === 9" style="height: 80%" src="../../../assets/img/fase-9.gif" alt="" />
+      <img *ngIf="building === 10" style="height: 80%" src="../../../assets/img/fase-10.gif" alt="" />
+    </div>
+    <div style="margin-top: 0%; margin-left: 0%; height: 20%">
+      <img style="height: 100%" src="../../../assets/img/nieve.gif" alt="" />
+    </div>
+    <!-- Building  -->
   </div>
   <!-- Page Content  -->
 </div>
+
+<!-- Questions Modal  -->
+<div id="openQuestion" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h4 class="modal-title">Questions</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label *ngIf="question !== undefined">{{question.CONTENT}}</label>
+          </div>
+          <div>
+            <div *ngFor="let item of answersList">
+              <input style="margin: 3vh; width: 90%; font-size: 9px;" (click)="answerQuestion(item)" class="btn btn-success" 
+              data-dismiss="modal" value="{{item.CONTENT}}"> 
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <label>Make sure to pick the rigth answer!</label>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Questions Modal  -->
+
+<!-- Profile Modal  -->
+<div id="openProfile" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h4 class="modal-title">Profile</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Username: {{user}}</label>
+          </div>
+          <div class="form-group">
+            <label>User Level: {{level}}</label>
+          </div>
+          <div class="form-group">
+            <label>Building Level: {{building}}</label>
+          </div>
+          <div>
+          <img *ngIf="building === 1" style="height: 30%; width: 50%;" src="../../../assets/img/fase-1.gif" alt="" />
+          <img *ngIf="building === 2" style="height: 30%; width: 50%;" src="../../../assets/img/fase-2.gif" alt="" />
+          <img *ngIf="building === 3" style="height: 30%; width: 50%;" src="../../../assets/img/fase-3.gif" alt="" />
+          <img *ngIf="building === 4" style="height: 30%; width: 50%;" src="../../../assets/img/fase-4.gif" alt="" />
+          <img *ngIf="building === 5" style="height: 30%; width: 50%;" src="../../../assets/img/fase-5.gif" alt="" />
+          <img *ngIf="building === 6" style="height: 30%; width: 50%;" src="../../../assets/img/fase-6.gif" alt="" />
+          <img *ngIf="building === 7" style="height: 30%; width: 50%;" src="../../../assets/img/fase-7.gif" alt="" />
+          <img *ngIf="building === 8" style="height: 30%; width: 50%;" src="../../../assets/img/fase-8.gif" alt="" />
+          <img *ngIf="building === 9" style="height: 30%; width: 50%;" src="../../../assets/img/fase-9.gif" alt="" />
+          <img *ngIf="building === 10" style="height: 30%; width: 50%;" src="../../../assets/img/fase-10.gif" alt="" />
+          </div>
+          <div class="form-group">
+            <label>Correct Answers in the current building level: {{correctAnswers}}</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Profile Modal  -->

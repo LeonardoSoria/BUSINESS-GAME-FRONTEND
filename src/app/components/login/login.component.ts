@@ -11,16 +11,8 @@ import {Router} from '@angular/router';
 export class LoginComponent implements OnInit {
 
   versions = [];
-  progress = {
-    user: 'leo',
-    level: 1,
-    building: 1,
-    questions: [],
-    correctAnswers: 0
-  };
-  states = {
-    'v1.0': this.progress
-  };
+  progress = {};
+  states = {};
 
   userLogin = '';
   password = '';
@@ -45,7 +37,6 @@ export class LoginComponent implements OnInit {
     const flag = this.validateLogin();
     if (flag) {
       this.service.login(this.userLogin, this.password).subscribe(data => {
-        console.log(data);
         if (data.ok) {
           localStorage.setItem('token', data.token);
           let values = [];
@@ -61,12 +52,19 @@ export class LoginComponent implements OnInit {
             user: data.data.user_name,
             building: data.data.building,
             level: data.data.user_level,
-            questions: data.data.questions,
-            answers: this.getActions(this.filterAnswers, {
+            questions: this.getActions(this.filterQuestions, {
               questions: data.data.questions,
               answers: data.data.answers,
-              userAnswers: data.data.user_answers,
-              userId: data.data.user_id
+              userAnswers: data.data.user_answers
+            }),
+            answers: this.getActions(this.filterAnswers, {
+              questions: this.getActions(this.filterQuestions, {
+                questions: data.data.questions,
+                answers: data.data.answers,
+                userAnswers: data.data.user_answers,
+                userId: data.data.user_id
+              }),
+              answers: data.data.answers,
             }),
             correctAnswers: this.getActions(this.calculateCorrectAnswers, {
               userAnswers: data.data.user_answers,
@@ -74,9 +72,18 @@ export class LoginComponent implements OnInit {
               answers: data.data.answers
             })
           });
-          // this.states = values[0];
-          // this.progress = values[1];
-          this.logger.info('El usuario ' + localStorage.getItem('user') + ' se logueó en la aplicación');
+
+          this.states = values[0];
+          this.progress = values[1];
+          console.log(this.states);
+          console.log(this.versions);
+          localStorage.setItem('versions', JSON.stringify(this.versions));
+          localStorage.setItem('states', JSON.stringify(this.states));
+          const last = this.getActions(this.getLastVersion, {
+            versions: this.versions
+          });
+          console.log(this.states[last]);
+          this.logger.info('El usuario ' + this.states[last].user + ' se logueó en la aplicación');
           this.router.navigate(['/in-game']);
         } else {
           this.logger.error('Ocurrió un error', data);
@@ -92,14 +99,14 @@ export class LoginComponent implements OnInit {
   /**
    * This is the wrapper for any function that we are going to call to do the login in the application
    */
-  getActions(functions, args) {
+  getActions(functions: any, args: any) {
     return functions(args);
   }
 
   /**
    * This is the function that returns the last version of the states of the application
    */
-  getLastVersion(args) {
+  getLastVersion(args: any) {
     if (args.versions.length <= 0) {
       return 'v1.0';
     }
@@ -109,14 +116,14 @@ export class LoginComponent implements OnInit {
   /**
    * This function makes the upgrade of versions
    */
-  roundNumber(value, decimals) {
+  roundNumber(value: any, decimals: any) {
     return Number(Math.round(Number(value + 'e' + decimals)) + 'e-' + decimals);
   }
 
   /**
    * This function saves the user's data in our states manager
    */
-  loginUser(args) {
+  loginUser(args: any) {
     const newVersion = 'v' + args.roundNumber(Number(args.lastVersion.replace('v', '')) + 1, 1);
     args.versions.push(newVersion);
     args.progress.user = args.user;
@@ -124,6 +131,7 @@ export class LoginComponent implements OnInit {
     args.progress.level = args.level;
     args.progress.questions = args.questions;
     args.progress.answers = args.answers;
+    args.progress.correctAnswers = args.correctAnswers;
     args.states[newVersion] = args.progress;
     return [args.states, args.versions];
   }
@@ -131,29 +139,67 @@ export class LoginComponent implements OnInit {
   /**
    * This function rigth here filters the avalaible questions for the user in session
    */
-  filterAnswers(args) {
+  filterQuestions(args: any) {
+    console.log('user_answers');
+    console.log(args.userAnswers);
+    console.log('answers');
+    console.log(args.answers);
     if (args.userAnswers !== null) {
-      const filteredAnswers = args.answers.filter(x => x.question_id === args.questions[0].question_id);
+      // const filteredAnswers = args.answers.filter(x => x.question_id === args.questions[0].question_id);
+      const filteredAnswers = args.answers.filter(({question_id}) =>
+      args.questions.some(exclude => exclude.question_id === question_id)
+      );
       const alreadyAsweredAnswers = filteredAnswers.filter(({answer_id}) =>
         args.userAnswers.some(exclude => exclude.answer_id === answer_id)
       );
-      // console.log(alreadyAsweredAnswers);
+      console.log('alreadyAsweredAnswers');
+      console.log(alreadyAsweredAnswers);
       const areCorrects = alreadyAsweredAnswers.filter(x => x.iscorrect === true);
-      // console.log(areCorrects);
+      console.log('areCorrects');
+      console.log(areCorrects);
       const enableQuestions = args.questions.filter(({question_id}) =>
         !areCorrects.some(exclude => exclude.question_id === question_id)
       );
-      // console.log(enableQuestions);
+      console.log('enableQuestions');
+      console.log(enableQuestions);
       return enableQuestions;
     }
     return args.questions;
   }
 
   /**
+   * This function filters the answers that belongs to the user questions
+   * @param args this variable receives questions and answers
+   */
+  filterAnswers(args: any) {
+    if (args.answers !== null) {
+      const enableAnswers = args.answers.filter(({question_id}) =>
+        args.questions.some(exclude => exclude.question_id === question_id)
+      );
+      // console.log(enableAnswers);
+      return enableAnswers;
+    }
+    return args.answers;
+  }
+
+  /**
    * This function returns the number of correct answers at the moment of the user
    */
-  calculateCorrectAnswers(args) {
-
+  calculateCorrectAnswers(args: any) {
+    if (args.userAnswers !== null) {
+      // const filteredAnswers = args.answers.filter(x => x.question_id === args.questions[0].question_id);
+      const filteredAnswers = args.answers.filter(({question_id}) =>
+      args.questions.some(exclude => exclude.question_id === question_id)
+      );
+      const alreadyAsweredAnswers = filteredAnswers.filter(({answer_id}) =>
+        args.userAnswers.some(exclude => exclude.answer_id === answer_id)
+      );
+      // console.log(alreadyAsweredAnswers);
+      const areCorrects = alreadyAsweredAnswers.filter(x => x.iscorrect === true);
+      console.log(areCorrects.length);
+      return areCorrects.length;
+    }
+    return 0;
   }
 
   /**

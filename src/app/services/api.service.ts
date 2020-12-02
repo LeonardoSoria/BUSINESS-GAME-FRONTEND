@@ -10,6 +10,7 @@ import { LogService } from './log.service';
 export class ApiService {
 
   baseUrl = 'https://business-game-backend.herokuapp.com/';
+  // baseUrl = 'http://localhost:5000/';
 
   /*  Inside the parameters we declare the httpClient wich is the one that is going to do the connection to the API
       and the logger is the service that is going to do the Log service*/
@@ -27,6 +28,34 @@ export class ApiService {
     const headers = new HttpHeaders();
     headers.set('Content-Type', 'application/json; charset=utf-8');
     return this.http.post(url, data, {headers}).pipe(
+      catchError(this.error)
+    );
+  }
+
+  answerQuestions(userLogin, level, building, answerId): Observable<any> {
+    const url = `${this.baseUrl}game_000/game_001/answerQuestions`;
+    const data = {
+      userLogin,
+      level,
+      building,
+      answerId
+    };
+    const httpOptions = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: localStorage.getItem('token')
+    });
+    return this.http.post(url, data, {headers: httpOptions}).pipe(
+      catchError(this.error)
+    );
+  }
+
+  getQuestions(user): Observable<any> {
+    const url = `${this.baseUrl}game_000/game_001/getQuestions/${user}`;
+    const httpOptions = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: localStorage.getItem('token')
+    });
+    return this.http.get(url, {headers: httpOptions}).pipe(
       catchError(this.error)
     );
   }
