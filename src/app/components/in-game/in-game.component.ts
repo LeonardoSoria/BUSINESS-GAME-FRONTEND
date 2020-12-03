@@ -22,9 +22,10 @@ export class InGameComponent implements OnInit {
   answersList: Array<any> = new Array<any>();
 
   /**
-   *  Inside the parameters we declare the ApiService wich is the one that is going to do the connection to the API.
-   *  the logger is the service that is going to do the Log service.
-   *  the router is in charge of doing the redirection between components.
+   * This contructor initialize the first time that the component get loaded
+   * @param service ApiService wich is the one that is going to do the connection to the API.
+   * @param router the router is in charge of doing the redirection between components.
+   * @param logger this is the service that is going to do the Log service.
    */
   constructor(private service: ApiService, private router: Router, private logger: LogService) { }
 
@@ -43,6 +44,8 @@ export class InGameComponent implements OnInit {
 
   /**
    * This is the wrapper for any function that we are going to call to do the login in the application
+   * @param functions this is the function to execute
+   * @param args these are the arguments passed as a dictionary
    */
   getActions(functions: any, args: any) {
     return functions(args);
@@ -50,6 +53,7 @@ export class InGameComponent implements OnInit {
 
   /**
    * This is the function that returns the last version of the states of the application
+   * @param args these are the arguments passed as a dictionary, in this case the versions used in the states
    */
   getLastVersion(args: any) {
     if (args.versions.length <= 0) {
@@ -58,6 +62,9 @@ export class InGameComponent implements OnInit {
     return args.versions[args.versions.length - 1];
   }
 
+  /**
+   * This is the function that shows the questions to the user
+   */
   showQuestion() {
     // this.question = this.questions[Math.floor(Math.random() * this.questions.length)];
     const currentVersion = this.getActions(this.getLastVersion, {
@@ -67,6 +74,10 @@ export class InGameComponent implements OnInit {
     this.answersList = this.states[currentVersion].answers.filter(x => x.question_id === this.question.question_id);
   }
 
+  /**
+   * This is the function that asnwers the questions and called the function update info to update the states
+   * @param answer the answer object
+   */
   answerQuestion(answer: any) {
     console.log(answer);
     const currentVersion = this.getActions(this.getLastVersion, {
@@ -219,6 +230,11 @@ export class InGameComponent implements OnInit {
     }
   }
 
+  /**
+   * This function update the states and set a new version
+   * @param args these are the arguments passed as a dictionary, it has the versions, the progress object, 
+   * the user, the buildng level, the questions, the answers, the correct answers
+   */
   updateInfo(args: any) {
     const newVersion = 'v' + args.roundNumber(Number(args.lastVersion.replace('v', '')) + 1, 1);
     args.versions.push(newVersion);
@@ -258,6 +274,8 @@ export class InGameComponent implements OnInit {
 
   /**
    * This function makes the upgrade of versions
+   * @param value the value is a number
+   * @param decimals the decimals that the state will have
    */
   roundNumber(value: any, decimals: any) {
     return Number(Math.round(Number(value + 'e' + decimals)) + 'e-' + decimals);
@@ -265,6 +283,8 @@ export class InGameComponent implements OnInit {
 
   /**
    * This function rigth here filters the avalaible questions for the user in session
+   * @param args these are the arguments passed as a dictionary, it has the answers already answered by the user, all the answers
+   * and all the questions
    */
   filterQuestions(args: any) {
     console.log(args);
@@ -312,6 +332,7 @@ export class InGameComponent implements OnInit {
 
   /**
    * This function returns the number of correct answers at the moment of the user
+   * @param args these are the arguments passed as a dictionary
    */
   calculateCorrectAnswers(args: any) {
     if (args.userAnswers !== null) {

@@ -20,9 +20,10 @@ export class LoginComponent implements OnInit {
   mensaje2 = false;
 
   /**
-   *  Inside the parameters we declare the ApiService wich is the one that is going to do the connection to the API.
-   *  the logger is the service that is going to do the Log service.
-   *  the router is in charge of doing the redirection between components.
+   * This contructor initialize the first time that the component get loaded
+   * @param service ApiService wich is the one that is going to do the connection to the API.
+   * @param router the router is in charge of doing the redirection between components.
+   * @param logger this is the service that is going to do the Log service.
    */
   constructor(private logger: LogService, private service: ApiService, private router: Router) { }
 
@@ -98,6 +99,8 @@ export class LoginComponent implements OnInit {
 
   /**
    * This is the wrapper for any function that we are going to call to do the login in the application
+   * @param functions this is the function to execute
+   * @param args these are the arguments passed as a dictionary
    */
   getActions(functions: any, args: any) {
     return functions(args);
@@ -105,6 +108,7 @@ export class LoginComponent implements OnInit {
 
   /**
    * This is the function that returns the last version of the states of the application
+   * @param args these are the arguments passed as a dictionary, in this case the versions used in the states
    */
   getLastVersion(args: any) {
     if (args.versions.length <= 0) {
@@ -115,6 +119,8 @@ export class LoginComponent implements OnInit {
 
   /**
    * This function makes the upgrade of versions
+   * @param value the value is a number
+   * @param decimals the decimals that the state will have
    */
   roundNumber(value: any, decimals: any) {
     return Number(Math.round(Number(value + 'e' + decimals)) + 'e-' + decimals);
@@ -122,6 +128,8 @@ export class LoginComponent implements OnInit {
 
   /**
    * This function saves the user's data in our states manager
+   * @param args these are the arguments passed as a dictionary, it has the versions, the progress object,
+   * the user, the buildng level, the questions, the answers, the correct answers
    */
   loginUser(args: any) {
     const newVersion = 'v' + args.roundNumber(Number(args.lastVersion.replace('v', '')) + 1, 1);

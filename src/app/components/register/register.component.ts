@@ -16,9 +16,10 @@ export class RegisterComponent implements OnInit {
   mensaje: number;
 
   /**
-   *  Inside the parameters we declare the ApiService wich is the one that is going to do the connection to the API.
-   *  the logger is the service that is going to do the Log service.
-   *  the router is in charge of doing the redirection between components.
+   * This contructor initialize the first time that the component get loaded
+   * @param service ApiService wich is the one that is going to do the connection to the API.
+   * @param router the router is in charge of doing the redirection between components.
+   * @param logger this is the service that is going to do the Log service.
    */
   constructor(private logger: LogService, private service: ApiService, private router: Router) { }
 
