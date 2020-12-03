@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LogService } from '../../services/log.service';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
+import { CryptService } from '../../services/crypt.service';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,10 @@ export class RegisterComponent implements OnInit {
    *  the logger is the service that is going to do the Log service.
    *  the router is in charge of doing the redirection between components.
    */
-  constructor(private logger: LogService, private service: ApiService, private router: Router) { }
+  constructor(private logger: LogService,
+              private service: ApiService,
+              private router: Router,
+              private cryptService: CryptService) { }
 
   ngOnInit(): void {
   }
@@ -32,7 +36,7 @@ export class RegisterComponent implements OnInit {
   register() {
     const flag = this.validateRegister();
     if (flag === 0) {
-      this.service.register(this.email, this.userLogin, this.password).subscribe(data => {
+      this.service.register(this.email, this.userLogin, this.cryptService.encrypt(this.password)).subscribe(data => {
         if (data.ok) {
           this.logger.info('El usuario ' + localStorage.getItem('user') + ' se registró en la aplicación');
           this.router.navigate(['/login']);
