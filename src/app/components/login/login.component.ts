@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LogService } from '../../services/log.service';
 import { ApiService } from '../../services/api.service';
 import {Router} from '@angular/router';
+import { CryptService } from '../../services/crypt.service';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,10 @@ export class LoginComponent implements OnInit {
    * @param router the router is in charge of doing the redirection between components.
    * @param logger this is the service that is going to do the Log service.
    */
-  constructor(private logger: LogService, private service: ApiService, private router: Router) { }
+  constructor(private logger: LogService,
+              private service: ApiService,
+              private cryptService: CryptService,
+              private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -37,7 +41,7 @@ export class LoginComponent implements OnInit {
   login() {
     const flag = this.validateLogin();
     if (flag) {
-      this.service.login(this.userLogin, this.password).subscribe(data => {
+      this.service.login(this.userLogin, this.cryptService.encrypt(this.password)).subscribe(data => {
         if (data.ok) {
           localStorage.setItem('token', data.token);
           let values = [];

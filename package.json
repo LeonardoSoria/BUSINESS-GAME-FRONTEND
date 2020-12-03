@@ -24,6 +24,7 @@
     "@angular/platform-browser": "~9.1.0",
     "@angular/platform-browser-dynamic": "~9.1.0",
     "@angular/router": "~9.1.0",
+    "crypto-js": "^4.0.0",
     "express": "^4.17.1",
     "http": "0.0.1-security",
     "path": "^0.12.7",
